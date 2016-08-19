@@ -103,10 +103,8 @@ RUN ldconfig && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ## prepare the notebooks folder
-RUN mkdir /notebooks
-RUN chown -R jovyan:users /notebooks
-VOLUME /notebooks
-WORKDIR /notebooks
+WORKDIR /home/jovyan/work
+VOLUME /home/jovyan/work
 
 ## Misc
 ENV LC_ALL=C
