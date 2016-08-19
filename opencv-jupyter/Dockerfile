@@ -9,6 +9,7 @@ MAINTAINER Eran Segal <eran@sphericalcow.io>
 # - https://github.com/srzyhead/docker-ipython-opencv/commit/d5e99f7c8986723ed85d90d9cf95267b866e1017
 
 USER root
+ENV NUM_CORES 4
 
 ## Install packages
 RUN apt-get update -qq && \
@@ -29,7 +30,7 @@ WORKDIR /tmp
 RUN git clone --depth 1 git://source.ffmpeg.org/ffmpeg && \
 	cd ffmpeg && \
 	./configure --enable-shared --disable-static --enable-nonfree && \
-    make -j ${nproc} && \
+    make -j ${NUM_CORES} && \
     make install
 
 # Build OpenCV 3.x
@@ -68,7 +69,7 @@ RUN mkdir -p opencv/build && cd opencv/build &&
           -D PYTHON3_NUMPY_INCLUDE_DIRS=/opt/conda/lib/python3.5/site-packages/numpy/core/include/ \
           ..
 
-RUN make -j ${nproc} && \
+RUN make -j ${NUM_CORES} && \
 	make install &&
     sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
 
@@ -79,7 +80,7 @@ WORKDIR /tmp
 RUN curl -L ftp://ftp.gnu.org/gnu/gsl/gsl-2.1.tar.gz | tar zxf - && \
     cd gsl-2.1 && \
     ./configure && \
-    make -j ${nproc} && make install
+    make -j ${NUM_CORES} && make install
     cd ..
 
 # VLFeat
