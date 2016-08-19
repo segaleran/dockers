@@ -9,7 +9,7 @@ MAINTAINER Eran Segal <eran@sphericalcow.io>
 # - https://github.com/srzyhead/docker-ipython-opencv/commit/d5e99f7c8986723ed85d90d9cf95267b866e1017
 
 USER root
-ENV NUM_CORES 4
+ARG NUM_CORES 2
 
 ## Install packages
 RUN apt-get update -qq && \
