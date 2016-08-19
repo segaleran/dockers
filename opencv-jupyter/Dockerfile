@@ -102,15 +102,12 @@ RUN ldconfig && \
     apt-get autoclean && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-## prepare the notebooks folder
-WORKDIR /home/jovyan/work
-VOLUME /home/jovyan/work
-
 ## Misc
 ENV LC_ALL=C
 
 ## Switch back to jupyter user
 USER jovyan
+WORKDIR /home/jovyan/work
 
 ## Additional python modules
 #RUN /opt/conda/envs/python2/bin/pip install imutils minieigen
