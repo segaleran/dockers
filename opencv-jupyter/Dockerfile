@@ -37,7 +37,7 @@ RUN git clone --depth 1 git://source.ffmpeg.org/ffmpeg && \
 WORKDIR /tmp
 RUN git clone --depth 1 https://github.com/opencv/opencv.git
 RUN git clone --depth 1 https://github.com/opencv/opencv_contrib.git
-RUN mkdir -p opencv/build && cd opencv/build &&
+RUN mkdir -p opencv/build && cd opencv/build && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE \
           -D CMAKE_INSTALL_PREFIX=/usr/local \
           -D WITH_TBB=ON \
