@@ -70,7 +70,7 @@ RUN mkdir -p opencv/build && cd opencv/build && \
           ..
 
 RUN make -j ${NUM_CORES} && \
-	make install &&
+	make install && \
     sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
 
 ## Additional modules
@@ -80,7 +80,7 @@ WORKDIR /tmp
 RUN curl -L ftp://ftp.gnu.org/gnu/gsl/gsl-2.1.tar.gz | tar zxf - && \
     cd gsl-2.1 && \
     ./configure && \
-    make -j ${NUM_CORES} && make install
+    make -j ${NUM_CORES} && make install && \
     cd ..
 
 # VLFeat
@@ -95,7 +95,7 @@ RUN ln /dev/null /dev/raw1394
 RUN echo 'KERNEL=="raw1394", GROUP="video"' > /etc/udev/rules.d/raw1394.rules
 
 # cleanup package manager
-RUN ldconfig &&
+RUN ldconfig && \
 	apt-get remove --purge -y curl build-essential checkinstall cmake && \
     apt-get autoclean && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
