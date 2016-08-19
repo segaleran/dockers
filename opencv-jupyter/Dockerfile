@@ -28,16 +28,18 @@ RUN apt-get update -qq && \
 # see: http://stackoverflow.com/questions/26592577/installing-opencv-in-ubuntu-14-10/27020828#27020828
 WORKDIR /tmp
 RUN git clone --depth 1 git://source.ffmpeg.org/ffmpeg && \
-	cd ffmpeg && \
-	./configure --enable-shared --disable-static --enable-nonfree && \
-    make -j ${NUM_CORES} && \
-    make install
+  cd ffmpeg && \
+  ./configure --enable-shared --disable-static --enable-nonfree && \
+  make -j ${NUM_CORES} && \
+  make install && \
+  make clean
 
 # Build OpenCV 3.x
 WORKDIR /tmp
 RUN git clone --depth 1 https://github.com/opencv/opencv.git
 RUN git clone --depth 1 https://github.com/opencv/opencv_contrib.git
-RUN mkdir -p opencv/build && cd opencv/build && \
+RUN mkdir -p opencv/build && \
+    cd opencv/build && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE \
           -D CMAKE_INSTALL_PREFIX=/usr/local \
           -D WITH_TBB=ON \
@@ -67,21 +69,21 @@ RUN mkdir -p opencv/build && cd opencv/build && \
           -D PYTHON_LIBRARY=/opt/conda/lib/libpython3.so \
           -D PYTHON3_PACKAGES_PATH=/opt/conda/lib/python3.5/site-packages \
           -D PYTHON3_NUMPY_INCLUDE_DIRS=/opt/conda/lib/python3.5/site-packages/numpy/core/include/ \
-          ..
-
-RUN make -j ${NUM_CORES} && \
-	make install && \
-    sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
+          .. && \
+          make -j ${NUM_CORES} && \
+          make install && \
+          make clean && \
+          sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
 
 ## Additional modules
-
 # GSL 2.1
 WORKDIR /tmp
 RUN curl -L ftp://ftp.gnu.org/gnu/gsl/gsl-2.1.tar.gz | tar zxf - && \
     cd gsl-2.1 && \
     ./configure && \
-    make -j ${NUM_CORES} && make install && \
-    cd ..
+    make -j ${NUM_CORES} && \
+    make install && \
+    make clean
 
 # VLFeat
 WORKDIR /usr/local/src
@@ -96,7 +98,7 @@ RUN echo 'KERNEL=="raw1394", GROUP="video"' > /etc/udev/rules.d/raw1394.rules
 
 # cleanup package manager
 RUN ldconfig && \
-	apt-get remove --purge -y curl build-essential checkinstall cmake && \
+    apt-get remove --purge -y curl build-essential checkinstall cmake && \
     apt-get autoclean && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
