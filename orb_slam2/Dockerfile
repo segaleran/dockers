@@ -130,4 +130,4 @@ RUN export uid=1000 gid=1000 && \
 
 USER user
 ENV HOME /home/user
-CMD /usr/bin/bash
+CMD /bin/bash
