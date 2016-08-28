@@ -123,10 +123,7 @@ RUN export uid=1000 gid=1000 && \
     chown ${uid}:${gid} -R /home/user
 
 ## Use something like this to connect to your xserver
-# docker run -ti --rm \
-#            -e DISPLAY=$DISPLAY \
-#            -v /tmp/.X11-unix:/tmp/.X11-unix \
-#            <command>
+# -e DISPLAY -v $HOME/.Xauthority:/home/user/.Xauthority --net=host
 
 USER user
 ENV HOME /home/user
