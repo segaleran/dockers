@@ -78,7 +78,7 @@ RUN git clone --depth 1 git://github.com/stevenlovegrove/Pangolin.git && \
     make install
 
 # ORB_SLAM2
-WORKDIR /home/user/ORB_SLAM2
+WORKDIR /home/user/
 RUN git clone git://github.com/raulmur/ORB_SLAM2 && \
     cd ORB_SLAM2 && \
     #chmod +x build.sh && \
