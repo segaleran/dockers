@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 MAINTAINER Eran Segal <eran@sphericalcow.io>
 
 USER root
-ARG NUM_CORES=4
+ARG NUM_CORES=2
 
 ## Install packages
 RUN apt-get update -q && \
