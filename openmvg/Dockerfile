@@ -1,33 +1,52 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
+
+MAINTAINER Eran Segal <eran@sphericalcow.io>
+
+USER root
+ARG NUM_CORES=2
 
 # Add openMVG binaries to path
-ENV PATH $PATH:/opt/openMVG_Build/install/bin
+#ENV PATH $PATH:/opt/openMVG_Build/install/bin
 
-# Get dependencies
-RUN apt-get update && apt-get install -y \
-  build-essential \
-  cmake \
-  graphviz \
-  git \
-  gcc-4.8 \ 
-  gcc-4.8-multilib \  
-  libpng-dev \
-  libjpeg-dev \
-  libtiff-dev \
-  libxxf86vm1 \
-  libxxf86vm-dev \
-  libxi-dev \
-  libxrandr-dev \
-  python-dev \  
-  python-pip
+## Install packages
+RUN apt-get update -q && \
+    apt-get install -y --fix-missing --no-install-recommends \
+    # Basics
+    ca-certificates \
+    wget
+    build-essential
+    cmake
+    graphviz \
+    git \
+    gcc-4.8 \ 
+    gcc-4.8-multilib \  
+    libpng-dev \
+    libjpeg-dev \
+    libtiff-dev \
+    libxxf86vm1 \
+    libxxf86vm-dev \
+    libxi-dev \
+    libxrandr-dev \
+    python-dev \  
+    python-pip
 
 # Clone the openvMVG repo 
-ADD . /opt/openMVG
-RUN cd /opt/openMVG && git submodule update --init --recursive
+WORKDIR /tmp
+RUN git clone --recursive --depth=1 https://github.com/openMVG/openMVG && \
+    mkdir /opt/openMVG && \
+    cd /opt/openMVG && \
+    cmake -DCMAKE_BUILD_TYPE=RELEASE \
+          -DCMAKE_INSTALL_PREFIX="/opt/openMVG" \
+          -DOpenMVG_BUILD_TESTS=ON \
+          -DOpenMVG_BUILD_EXAMPLES=ON \
+          /tmp/openMVG/src/ && \
+    make && \
+    make test
 
-# Build
-RUN mkdir /opt/openMVG_Build && cd /opt/openMVG_Build && cmake -DCMAKE_BUILD_TYPE=RELEASE \
-  -DCMAKE_INSTALL_PREFIX="/opt/openMVG_Build/install" -DOpenMVG_BUILD_TESTS=ON \
-  -DOpenMVG_BUILD_EXAMPLES=ON . ../openMVG/src/ && make
+# cleanup
+RUN ldconfig && \
+    apt-get autoclean && apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN cd /opt/openMVG_Build && make test
+WORKDIR /root
+CMD /bin/bash
