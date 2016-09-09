@@ -40,7 +40,10 @@ RUN git clone https://bitbucket.org/gtborg/gtsam.git && \
     cd gtsam && \
     mkdir build && \
     cd build && \
-    cmake .. && \
+    cmake -DGTSAM_USE_QUATERNIONS=ON \
+          -DGTSAM_BUILD_PYTHON=ON \
+          -DGTSAM_ALLOW_DEPRECATED_SINCE_V4=OFF \
+          .. && \
     make -j $NUM_CORES && \
     make install
 

@@ -40,7 +40,7 @@ RUN git clone --recursive --depth=1 https://github.com/openMVG/openMVG && \
           -DOpenMVG_BUILD_TESTS=ON \
           -DOpenMVG_BUILD_EXAMPLES=ON \
           /tmp/openMVG/src/ && \
-    make && \
+    make -j $NUM_CORES && \
     make test
 
 # cleanup
