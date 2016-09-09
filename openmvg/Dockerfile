@@ -13,9 +13,9 @@ RUN apt-get update -q && \
     apt-get install -y --fix-missing --no-install-recommends \
     # Basics
     ca-certificates \
-    wget
-    build-essential
-    cmake
+    wget \
+    build-essential \
+    cmake \
     graphviz \
     git \
     gcc-4.8 \ 
